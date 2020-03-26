@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_SUITE(func_test_suite)
             BOOST_CHECK(res == expected);
         }
         {
-            string line{""};
+            string line;
             auto res = all_prefixes(line);
             BOOST_CHECK(res.size() == line.size());
 
@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_SUITE(func_test_suite)
         }
     }
 
-    BOOST_AUTO_TEST_CASE(test_calc_lines) {
+    BOOST_AUTO_TEST_CASE(test_calc_duplicates) {
         {
             vector<string> lines{
                     "abc", "abc", "abc",
@@ -125,11 +125,11 @@ BOOST_AUTO_TEST_SUITE(func_test_suite)
                     "adb",
                     "adba",
             };
-            CalcLines func;
+            CalcDuplicates func;
+            Yamr::StrList res;
             for (const auto &line : lines) {
-                func(line);
+                res = func(line);
             }
-            auto res = func.get_res();
             vector<string> expected{
                     "3 abc",
                     "2 abs",
@@ -146,11 +146,11 @@ BOOST_AUTO_TEST_SUITE(func_test_suite)
                     "bca",
                     "adb", "adb",
             };
-            CalcLines func;
+            CalcDuplicates func;
+            Yamr::StrList res;
             for (const auto &line : lines) {
-                func(line);
+                res = func(line);
             }
-            auto res = func.get_res();
             vector<string> expected{
                     "3 abc",
                     "2 abs",
@@ -161,7 +161,7 @@ BOOST_AUTO_TEST_SUITE(func_test_suite)
         }
     }
 
-    BOOST_AUTO_TEST_CASE(test_check_duplicate) {
+    BOOST_AUTO_TEST_CASE(test_get_min_unique_prefix_size) {
         {
             vector<string> lines{
                     "abc", "abc", "abc",
@@ -170,81 +170,11 @@ BOOST_AUTO_TEST_SUITE(func_test_suite)
                     "adb",
                     "adba",
             };
-            CheckPrefixIsDuplicate func;
+            GetMinUniquePrefixSize func;
+            Yamr::StrList res;
             for (const auto &line : lines) {
-                func(line);
+                res = func(line);
             }
-            auto res = func.get_res();
-            vector<string> expected{
-                    "3 true",
-                    "4 false",
-            };
-            BOOST_CHECK(res == expected);
-        }
-        {
-            vector<string> lines{
-                    "a", "a", "a", "a",
-                    "ab", "ab", "ab",
-                    "abc",
-                    "abs", "abs",
-                    "abcd", "abcd",
-                    "abcf",
-                    "abcdef",
-            };
-            CheckPrefixIsDuplicate func;
-            for (const auto &line : lines) {
-                func(line);
-            }
-            auto res = func.get_res();
-            vector<string> expected{
-                    "1 true",
-                    "2 true",
-                    "3 true",
-                    "4 true",
-                    "6 false",
-            };
-            BOOST_CHECK(res == expected);
-        }
-        {
-            vector<string> lines{
-                    "a", "a", "a", "a",
-                    "ab", "ab", "ab",
-                    "abc",
-                    "abs", "abs",
-                    "abcd", "abcd",
-                    "abcf",
-                    "abcdef", "abcdef",
-            };
-            CheckPrefixIsDuplicate func;
-            for (const auto &line : lines) {
-                func(line);
-            }
-            auto res = func.get_res();
-            vector<string> expected{
-                    "1 true",
-                    "2 true",
-                    "3 true",
-                    "4 true",
-                    "6 true",
-            };
-            BOOST_CHECK(res == expected);
-        }
-    }
-
-    BOOST_AUTO_TEST_CASE(test_find_max_prefix) {
-        {
-            vector<string> lines{
-                    "abc", "abc", "abc",
-                    "abs", "abs",
-                    "bca",
-                    "adb",
-                    "adba",
-            };
-            FindMaxPrefix func;
-            for (const auto &line : lines) {
-                func(line);
-            }
-            auto res = func.get_res();
             vector<string> expected{
                     "4",
             };
@@ -260,11 +190,11 @@ BOOST_AUTO_TEST_SUITE(func_test_suite)
                     "abcf",
                     "abcdef",
             };
-            FindMaxPrefix func;
+            GetMinUniquePrefixSize func;
+            Yamr::StrList res;
             for (const auto &line : lines) {
-                func(line);
+                res = func(line);
             }
-            auto res = func.get_res();
             vector<string> expected{
                     "5",
             };
@@ -280,13 +210,135 @@ BOOST_AUTO_TEST_SUITE(func_test_suite)
                     "abcf",
                     "abcdef", "abcdef",
             };
-            FindMaxPrefix func;
+            GetMinUniquePrefixSize func;
+            Yamr::StrList res;
             for (const auto &line : lines) {
-                func(line);
+                res = func(line);
             }
-            auto res = func.get_res();
             vector<string> expected{
                     "6",
+            };
+            BOOST_CHECK(res == expected);
+        }
+    }
+
+    BOOST_AUTO_TEST_CASE(test_get_min_virtual_unique_prefix_size) {
+        {
+            vector<string> lines{
+                    "abc", "abc", "abc",
+                    "abs", "abs",
+                    "bca",
+                    "adb",
+                    "adba",
+            };
+            GetMinVirtualUniquePrefixSize func;
+            Yamr::StrList res;
+            for (const auto &line : lines) {
+                res = func(line);
+            }
+            vector<string> expected{
+                    "4",
+            };
+            BOOST_CHECK(res == expected);
+        }
+        {
+            vector<string> lines{
+                    "a", "a", "a", "a",
+                    "ab", "ab", "ab",
+                    "abc",
+                    "abs", "abs",
+                    "abcd", "abcd",
+                    "abcf",
+                    "abcdef",
+            };
+            GetMinVirtualUniquePrefixSize func;
+            Yamr::StrList res;
+            for (const auto &line : lines) {
+                res = func(line);
+            }
+            vector<string> expected{
+                    "5",
+            };
+            BOOST_CHECK(res == expected);
+        }
+        {
+            vector<string> lines{
+                    "a", "a", "a", "a",
+                    "ab", "ab", "ab",
+                    "abc",
+                    "abs", "abs",
+                    "abcd", "abcd",
+                    "abcf",
+                    "abcdef", "abcdef",
+            };
+            GetMinVirtualUniquePrefixSize func;
+            Yamr::StrList res;
+            for (const auto &line : lines) {
+                res = func(line);
+            }
+            vector<string> expected{
+                    "7",
+            };
+            BOOST_CHECK(res == expected);
+        }
+    }
+
+    BOOST_AUTO_TEST_CASE(test_get_max_duplicate_prefix) {
+        {
+            vector<string> lines{
+                    "abc", "abc", "abc",
+                    "abs", "abs",
+                    "bca",
+                    "adb",
+                    "adba",
+            };
+            GetMaxDuplicatePrefix func;
+            Yamr::StrList res;
+            for (const auto &line : lines) {
+                res = func(line);
+            }
+            vector<string> expected{
+                    "3 abc",
+            };
+            BOOST_CHECK(res == expected);
+        }
+        {
+            vector<string> lines{
+                    "a", "a", "a", "a",
+                    "ab", "ab", "ab",
+                    "abc",
+                    "abs", "abs",
+                    "abcd", "abcd",
+                    "abcf",
+                    "abcdef",
+            };
+            GetMaxDuplicatePrefix func;
+            Yamr::StrList res;
+            for (const auto &line : lines) {
+                res = func(line);
+            }
+            vector<string> expected{
+                    "4 abcd",
+            };
+            BOOST_CHECK(res == expected);
+        }
+        {
+            vector<string> lines{
+                    "a", "a", "a", "a",
+                    "ab", "ab", "ab",
+                    "abc",
+                    "abs", "abs",
+                    "abcd", "abcd",
+                    "abcf",
+                    "abcdef", "abcdef",
+            };
+            GetMaxDuplicatePrefix func;
+            Yamr::StrList res;
+            for (const auto &line : lines) {
+                res = func(line);
+            }
+            vector<string> expected{
+                    "6 abcdef",
             };
             BOOST_CHECK(res == expected);
         }

@@ -1,68 +1,86 @@
 #pragma once
 
 #include <string>
-#include <vector>
-#include <map>
 
 #include "mapper.h"
 
-// mapper func. objects
-// interface:
-// std::vector<std::string> (*) (std::string)
+/** mapper func. objects
+ * interface:
+ * Yamr::StrList (*) (std::string)
+*/
 
-std::vector<std::string> copy_task(std::string line);
+/// returns line copy
+Yamr::StrList copy_task(std::string line);
 
-std::vector<const std::string&> first_letter_task(std::string line);
+/// returns line first letter
+Yamr::StrList first_letter_task(std::string line);
 
+/// returns n first letters from line
 struct NLetter {
     explicit NLetter(std::size_t letter_count) : letter_count_(letter_count) {}
 
-    std::vector<std::string> operator()(const std::string& line) const;
+    Yamr::StrList operator()(const std::string& line) const;
 
     std::size_t letter_count_ = 1;
 };
 
-std::vector<std::string> get_first_word(std::string line);
+/// returns first word in line
+Yamr::StrList get_first_word(std::string line);
 
-std::vector<std::string> get_all_words(std::string line);
+/// returns list of all words in line
+Yamr::StrList get_all_words(std::string line);
 
-std::vector<std::string> all_prefixes(std::string line);
+/// returns list of all prefixes of line
+Yamr::StrList all_prefixes(std::string line);
 
 
-// reducer func. objects
-// interface:
-// void (*)(std::string)
-// StrList get_res()
+/** reducer func. objects
+ * interface:
+ * Yamr::StrList (*)(std::string)
+*/
 
-struct CalcLines {
-    void operator()(std::string line);
-
-    Yamr::StrList get_res();
+/// calculates duplicates
+/// outputs found duplicates for every line
+struct CalcDuplicates {
+    Yamr::StrList operator()(std::string line);
 
     std::string prev_;
     std::size_t counter_ = 0;
     Yamr::StrList res_;
 };
 
-struct CheckPrefixIsDuplicate {
-    void operator()(std::string line);
-
-    Yamr::StrList get_res();
-
-    std::map<std::size_t, bool> size_to_isduplicate_;
-    std::string prev_;
-    std::size_t counter_ = 0;
-};
-
-struct FindMaxPrefix {
-    void operator()(std::string line);
-
-    Yamr::StrList get_res();
+/// get for every line min unique prefix size
+/// returns max duplicate prefix size if all input lines are equal
+struct GetMinUniquePrefixSize {
+    Yamr::StrList operator()(std::string line);
 
     std::string prev_;
     std::size_t counter_ = 0;
 
     std::size_t max_duplicate_size_ = 0;
+    std::size_t max_size_ = 0;
+};
+
+/// get for every line min unique prefix size
+/// returns max duplicate prefix size+1 if all input lines are equal
+struct GetMinVirtualUniquePrefixSize {
+    Yamr::StrList operator()(std::string line);
+
+    std::string prev_;
+    std::size_t counter_ = 0;
+
+    std::size_t max_duplicate_size_ = 0;
+};
+
+/// get for every line max duplicate prefix with its size
+struct GetMaxDuplicatePrefix {
+    Yamr::StrList operator()(std::string line);
+
+    std::string prev_;
+    std::size_t counter_ = 0;
+
+    std::size_t max_duplicate_size_ = 0;
+    std::string max_duplicate_prefix_;
     std::size_t max_size_ = 0;
 };
 

@@ -1,8 +1,6 @@
 #include "mapper.h"
 
-#include <utility>
 #include <optional>
-//#include <cmath>
 
 #include "file_utils.h"
 #include "iterator_range.h"

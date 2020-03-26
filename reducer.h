@@ -69,10 +69,14 @@ void Reducer::run(Func func, const std::string &fname_prefix) {
 
 template<typename Func>
 StrList Reducer::thread_work(StrList &str_list, Func func) {
+    StrList res;
+
+    // obtain only last result
     for (auto &line : str_list) {
-        func(std::move(line));
+        res = func(std::move(line));
     }
-    return func.get_res();
+
+    return res;
 }
 
 struct TestReducer {
