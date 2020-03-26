@@ -76,11 +76,10 @@ if (USE_TEST)
 endif()
 
 # target linking
-target_link_libraries(${EXE_NAME} Threads::Threads)
-target_link_libraries(${TEST_NAME} Threads::Threads)
+target_link_libraries(${EXE_NAME} Threads::Threads stdc++fs)
 if (USE_TEST)
     target_link_libraries(${TEST_NAME}
-        ${Boost_LIBRARIES}
+            Threads::Threads ${Boost_LIBRARIES} stdc++fs
     )
 endif()
 
